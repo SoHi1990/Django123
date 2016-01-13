@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404,render
 from django.core.urlresolvers import reverse
 from Django123.models import Question,Choice
 from django.http.response import HttpResponseRedirect,HttpResponse
+from django.views import generic
 
 def Hello(request):
     return HttpResponse("Hello")
@@ -29,3 +30,18 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('results', args=(question.id,)))
+    
+class IndexView(generic.ListView):
+    template_name = "index.html"
+    context_object_name = "latest_question_list"
+    
+    def IndexView(self):
+        return Question.objects.order_by('-pub_date')[:5]
+    
+class DetailView(generic.DeleteView):
+    model = Question
+    template_name = 'detail.html'
+    
+class ResultView(generic.DeleteView):
+    model = Question
+    template_name = 'results.html'
