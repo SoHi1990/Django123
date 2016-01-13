@@ -31,6 +31,10 @@ def vote(request, question_id):
         # user hits the Back button.
         return HttpResponseRedirect(reverse('results', args=(question.id,)))
     
+def results(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'results.html', {'question': question})
+    
 class IndexView(generic.ListView):
     template_name = "index.html"
     context_object_name = "latest_question_list"
